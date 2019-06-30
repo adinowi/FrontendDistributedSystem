@@ -34,7 +34,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'simple_record'
 
 gem 'dotenv-rails', groups: [:development, :test]
-gem 'aws-sdk', '< 2'
+gem 'aws-sdk', '<2'
 gem 'aws-sdk-resources', '~> 2'
 
 
