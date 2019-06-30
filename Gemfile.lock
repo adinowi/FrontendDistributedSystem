@@ -52,13 +52,16 @@ GEM
       uuidtools
       xml-simple
     aws-eventstream (1.0.3)
-    aws-sdk (2.11.306)
-      aws-sdk-resources (= 2.11.306)
+    aws-sdk (1.67.0)
+      aws-sdk-v1 (= 1.67.0)
     aws-sdk-core (2.11.306)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
     aws-sdk-resources (2.11.306)
       aws-sdk-core (= 2.11.306)
+    aws-sdk-v1 (1.67.0)
+      json (~> 1.4)
+      nokogiri (~> 1)
     aws-sigv4 (1.1.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
     bindex (0.7.0)
@@ -106,6 +109,7 @@ GEM
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
     jmespath (1.4.0)
+    json (1.8.6)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -222,7 +226,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  aws-sdk (~> 2)
+  aws-sdk (< 2)
   aws-sdk-resources (~> 2)
   bootsnap (>= 1.1.0)
   byebug
