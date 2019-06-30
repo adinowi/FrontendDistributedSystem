@@ -1,4 +1,4 @@
-<div>
+<div class="margin-bottom-20">
     <form action="<%= @s3_direct_post.url %>" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <input type="hidden" name="key" value="<%= @s3_direct_post.fields['key'] %>" /><br />
@@ -18,11 +18,19 @@
     </form>
 </div>
 <div>
+    <select multiple="multiple" class="image-picker show-html">
+        <% @objects.each do |object| %>
+            <option data-img-src='<%= @s3_direct_post.url + "/" + object.key %>' value="<%= object.key %>"></option>
+        <% end %>
+    </select>
 </div>
 
 <script>
 $(".custom-file-input").on("change", function() {
   var fileName = $(this).val().split("\\").pop();
   $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+$(document).ready(function() {
+    $("select").imagepicker();
 });
 </script>
