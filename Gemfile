@@ -33,6 +33,11 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'simple_record'
 
+gem 'dotenv-rails', groups: [:development, :test]
+gem 'aws-sdk', '~> 2'
+gem 'aws-sdk-resources', '~> 2'
+
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
