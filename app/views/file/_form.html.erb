@@ -8,6 +8,7 @@
         <input type="hidden" name="success_action_status" value="<%= @s3_direct_post.fields['success_action_status'] %>" />
         <input type="hidden" name="Policy" value='<%= @s3_direct_post.fields['policy'] %>' />
         <input type="hidden" name="X-Amz-Signature" value="<%= @s3_direct_post.fields['x-amz-signature'] %>" />
+        <input type="hidden" name="Success_action_redirect"  value="<%= @s3_direct_post.fields['success_action_redirect'] %>" />
         <div class="custom-file">
             <img id="fileImage" src="#" alt=""/>
             <label class="custom-file-label" for="file">File</label>
@@ -17,12 +18,31 @@
     <input class="btn btn-primary"  type="submit" name="submit" value="Upload to Amazon S3" />
     </form>
 </div>
-<div>
-    <select multiple="multiple" class="image-picker show-html">
-        <% @objects.each do |object| %>
-            <option data-img-src='<%= @s3_direct_post.url + "/" + object.key %>' value="<%= object.key %>"></option>
-        <% end %>
-    </select>
+<div class="margin-bottom-20">
+    <form action="/sendtoworker" method="post" enctype="application/x-www-form-urlencoded">
+        <select id="imageSelect" multiple="multiple" class="image-picker show-html" name="keys[]">
+            <% @objects.each do |object| %>
+                <option data-img-src='<%= @s3_direct_post.url + "/" + object.key %>' value="<%= object.key %>"></option>
+            <% end %>
+        </select>
+        <label for="operationSelect">Choose operation</label>
+        <select id="operationSelect" class="custom-select" name="operation">
+            <option selected value="rotate">Rotate</option>
+            <option value="scale">Scale</option>
+        </select>
+        <div id="rotateBlock" class="block">
+            <label for="rotateRange">Rotate range</label>
+            <span id="rotateValueText">0°</span>
+            <input type="range" class="custom-range" id="rotateRange" min="0" max="360" value="0"/>
+        </div>
+        <div id="scaleBlock" class="block">
+            <label for="scaleRange">Scale range</label>
+            <span id="scaleValueText">1</span>
+            <input type="range" class="custom-range" id="scaleRange" min="0.5" max="2" value="1" step="0.1"/>
+        </div>
+        <input type="hidden" name="value" id="transformationValue" value="0"/>
+        <input class="btn btn-primary"  type="submit" name="submit" value="Send to worker" />
+    </form>
 </div>
 
 <script>
@@ -30,7 +50,28 @@ $(".custom-file-input").on("change", function() {
   var fileName = $(this).val().split("\\").pop();
   $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 });
+
+$("#rotateRange").on("change", function(){
+    var value = $("#rotateRange").val();
+    $("#rotateValueText").text(value + "°");
+    $("#transformationValue").val(value);
+});
+
+$("#scaleRange").on("change", function(){
+    var value = $("#scaleRange").val();
+    $("#scaleValueText").text($("#scaleRange").val());
+    $("#transformationValue").val(value);
+});
+
+$("#operationSelect").on("change", function(){
+    $(".block").hide();
+    $("#" + $("#operationSelect").val() + "Block").show();
+    $("#transformationValue").val($("#" + $("#operationSelect").val() + "Range").val());
+});
+
 $(document).ready(function() {
-    $("select").imagepicker();
+    $("#imageSelect").imagepicker();
+    $(".block").hide();
+    $("#rotateBlock").show();
 });
 </script>
