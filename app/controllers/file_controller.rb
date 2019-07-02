@@ -10,6 +10,7 @@ class FileController < ApplicationController
 
     def send_to_worker
         sqs = Aws::SQS::Client.new
+        dynamodb = Aws::DynamoDB::Client.new
         entries = Array.new(params[:keys].size)
         i=0
         message_group_id = SecureRandom.uuid
@@ -27,6 +28,17 @@ class FileController < ApplicationController
             }
             entries[i] = obj
             i += 1
+            dynamodb.put_item({
+                item: {
+                  "uuid" => SecureRandom.uuid.to_s, 
+                  "operation" => params[:operation], 
+                  "key" => key, 
+                  "value" => params[:value], 
+                  "stage" =>"to SQS",  
+                }, 
+                return_consumed_capacity: "TOTAL", 
+                table_name: "Log", 
+              })
         end
         sqs.send_message_batch({
             queue_url: ENV['SQS_URL'],
